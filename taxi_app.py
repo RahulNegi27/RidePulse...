@@ -37,7 +37,6 @@ def load_data(sample_size=50000):
     
     df_sample = df.limit(sample_size)
     return df_sample.toPandas()
-
 # Sample size control
 sample_size = st.sidebar.selectbox("Sample Size", [10000, 50000, 100000, 200000], index=1)
 df = load_data(sample_size)
