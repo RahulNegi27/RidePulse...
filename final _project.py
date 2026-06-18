@@ -8,12 +8,10 @@ spark = SparkSession.builder \
     .appName("NYC_Taxi_Weather_Cleaned") \
     .getOrCreate()
 
-
 # 2. Load Taxi Data
 df_jan = spark.read.parquet(r"C:\Users\akanksha dhoundiyal\Desktop\pbl big data\yellow_tripdata_2024-01.parquet")
 df_aug = spark.read.parquet(r"C:\Users\akanksha dhoundiyal\Desktop\pbl big data\yellow_tripdata_2024-08.parquet")
 df_taxi = df_jan.union(df_aug)
-
 
 # 3. Convert datetime & filter valid fares
 df_taxi = df_taxi.withColumn("trip_date", to_date("tpep_pickup_datetime")) \
@@ -31,7 +29,6 @@ weather_df = weather_jan.union(weather_aug)
 weather_df = weather_df.withColumn("trip_date", to_date("datetime", "dd-MM-yyyy")) \
                        .select("trip_date", "temp", "feelslike", "humidity", "precip", "windspeed", "preciptype") \
                        .dropna(subset=["trip_date", "temp", "humidity", "precip", "windspeed"])
-
 
 # 6. Join taxi and weather data
 df_combined = df_taxi.join(weather_df, on="trip_date", how="inner")
